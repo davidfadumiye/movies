@@ -13,8 +13,7 @@
 
     <div class="d-block gap-2 col-8 mt-3 mx-auto">
       <input type="text" class="form-control text-center" placeholder="Search Database..." v-model="search"
-        @keyup.enter='find'/>
-
+        @keyup.enter='find'>
     </div>
     <div class="d-grid gap-2 col-2 mt-3 mx-auto pb-5">
       <button type="button" class="btn btn-primary" @click="find" v-if="year === ''">Search</button>
@@ -27,30 +26,37 @@
   <div class="container-fluid">
     <div class="row">
       <div class="">
-        <button @click="show = !show" class="btn btn-light my-2 px-5 mx-auto">Filter Results</button>
+        <button @click="show = !show" class="btn btn-outline-dark btn-sm my-2 px-5 mx-auto">Filter Results</button>
         <Transition duration="550" name="nested">
-          <div v-if="show" class="outer">
+          <div v-if="show" class="outer ">
 
-            <div class="d-grid col-2">
+            <div class="d-grid col-6">
               <label class="form-label">Year</label>
-              <input type="text" placeholder="year" class="form-control" v-model="year"
-                 @focus="filteryear">
-              <button type="text" class="form-control btn btn-primary" @click="find">Reset</button>
+              <div class='col-5 gap-3'>
+                <input type="text" placeholder="year" name="datepicker1" id="datepicker1" class="form-control"
+                  v-model="year" @focus="filteryear">
+                <div class="mx-auto col-3 pt-2">
+                  <button type="text" class="form-control btn btn-primary btn-sm" @click="find">Reset</button>
+                </div>
+              </div>
+
             </div>
 
-            <div class="d-grid col-2">
+
+            <div class="d-grid col-6">
               <label class="form-label">Genre</label>
-              <select class="form-select" @change="picked" v-model="selected">
-                <option value="" selected disabled>Select genre...</option>
+              <div class='col-5 gap-3'>
+                <select class="form-select" @ch="picked" v-model="selected">
+                  <option value="" selected disabled>Select genre...</option>
                   <option :value="genre.name" v-for="genre in genres" :key="genre.id">{{ genre.name }}</option>
+                </select>
+                <div class="mx-auto col-3 pt-2">
+                  <button type="text" class="form-control btn btn-primary btn-sm" @click="find">Reset</button>
+                </div>
+              </div>
 
-                
-              </select>
-              <!-- <input type="text" placeholder="year" class="form-control" v-model="year"
-                 @focus="filteryear"> -->
-              <button type="text" class="form-control btn btn-primary" @click="find">Reset</button>
+
             </div>
-
           </div>
         </Transition>
       </div>
@@ -60,9 +66,9 @@
   <div class="container ">
   </div>
 
-  <div class="container-fluid ops">
+  <div class="container-fluid ops" v-cloak>
     <div class="col-12" v-for="results in outcome" :key="results.id">
-      <div class="card mt-3 bg-secondary bg-gradient" style="max-width: 150%">
+      <div class="card mt-3" style="max-width: 150%">
         <div class="row">
           <div class="col-12">
             <img :src="this.img_link + results.poster_path" class="mx-auto d-block mt-2 fs-6 fw-lighter"
@@ -72,27 +78,34 @@
             <div class="card-body">
               <h5 class="card-title text-center">{{ results.original_title }}</h5>
               <p class="card-text fw-light">{{ results.overview }}</p>
-              <p class="card-text"><small class="text-muted">{{ results.release_date }}</small></p>
 
 
-              <div class="d-flex flex-row bd-highlight mb-3">
-                <div class="p-2 bd-highlight">
-                  <p>Genre:</p>
+              <div class="d-flex flex-row bd-highlight pt-3 pb-1">
+                <div class="bd-highlight">
+                  <p>Release date:</p>
                 </div>
-
-                  <div class="p-2 bd-highlight" v-for="code in results.genre_ids" :key="code">
-                    <!-- <div v-if="code.id === genres.id"></div> -->
-                    <p class="card-text"><small class="text-muted">{{ genres.filter(x => x.id === code).map(x =>
-                      x.name)[0]
-                    }}</small></p>
-                  </div>
-
+                <p class="card-text ms-3"><small class="text-muted">{{ results.release_date }}</small></p>
               </div>
 
-              <!-- genres.name -->
+            </div>
 
+            <div class="d-flex flex-row bd-highlight mb-3">
+              <div class="px-2 bd-highlight">
+                <p>Genre:</p>
+              </div>
+
+              <div class="px-2 bd-highlight" v-for="code in results.genre_ids" :key="code">
+                <!-- <div v-if="code.id === genres.id"></div> -->
+                <p class="card-text"><small class="text-muted">{{ genres.filter(x => x.id === code).map(x =>
+                  x.name)[0]
+                }}</small></p>
+              </div>
 
             </div>
+
+            <!-- genres.name -->
+
+
           </div>
         </div>
       </div>
@@ -114,11 +127,16 @@
       </ul>
     </nav>
   </div>
-</template>
+<!-- </div> --></template>
 
 <script>
 // import vue from 'vue'
 import axios from 'axios'
+// import jquery from 'jquery'
+// import customDateFormat from 'tempusDominus/plugins/customDateFormat'
+// tempusDominus.extend(customDateFormat);
+
+
 // import VueAxios from 'vue-axios'
 // vue.use(axios)
 
@@ -199,14 +217,19 @@ export default {
       console.log(this.selected)
     }
   }
-  // async mounted () {
-  // }
-  // ,
 }
+
+
 </script>
+
+
+
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+/* [v-cloak] {
+  display: none;
+} */
 .outer,
 .inner {
   background: #eee;
@@ -254,4 +277,5 @@ This is not needed in other browsers or Chrome 99+ where the bug
 has been fixed. */
 
   opacity: 0.001;
-}</style>
+}
+</style>
