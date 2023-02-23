@@ -36,7 +36,7 @@
                 <input type="text" placeholder="year" name="datepicker1" id="datepicker1" class="form-control"
                   v-model="year" @focus="filteryear">
                 <div class="mx-auto col-3 pt-2">
-                  <button type="text" class="form-control btn btn-primary btn-sm" @click="find">Reset</button>
+                  <button type="text" class="form-control btn btn-primary btn-sm" @click="resetyear">Reset</button>
                 </div>
               </div>
 
@@ -46,7 +46,7 @@
             <div class="d-grid col-6">
               <label class="form-label">Genre</label>
               <div class='col-5 gap-3'>
-                <select class="form-select" @ch="picked" v-model="selected">
+                <select class="form-select" @change="picked" v-model="selected">
                   <option value="" selected disabled>Select genre...</option>
                   <option :value="genre.name" v-for="genre in genres" :key="genre.id">{{ genre.name }}</option>
                 </select>
@@ -181,6 +181,10 @@ export default {
     //   this.pressed = !this.pressed
     //   console.log(this.pressed)
     // },
+    resetyear() {
+      this.year = ''
+      this.find
+    },
     add() {
       this.page += 1;
       // console.log(this.page)
@@ -215,6 +219,15 @@ export default {
     },
     picked() {
       console.log(this.selected)
+      var select_id = this.genres.filter(x => x.name === this.selected).map(x => x.id)[0]
+      select_id =  Number(select_id)
+      console.log(select_id)
+      
+      console.log(this.outcome)
+      var split = this.outcome.filter(x => x.genre_ids.includes(select_id))
+      this.outcome = split
+      // var results = this.outcome.filter(x => x.results.genre_ids = select_id) .results.genre_ids
+      // console.log(results)
     }
   }
 }
